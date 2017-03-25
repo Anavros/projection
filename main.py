@@ -54,8 +54,6 @@ def draw():
     program['slate'] = slate
     program['color'] = (0.0, 0.0, 0.0, 1.0)
     program.draw('triangle_strip', ind)
-    #program['color'] = (0.2, 0.3, 0.4, 1.0)
-    #program.draw('points')
 
 
 @rocket.attach
@@ -66,7 +64,7 @@ def key_press(key):
 
 @rocket.attach
 def left_drag(start, end, delta):
-    sphere.rotate(x=delta[0], y=delta[1])
+    sphere.rotate(x=delta[0])
 
 
 @rocket.attach
@@ -86,15 +84,14 @@ def main():
 def init():
     global program, camera, sphere
     program = rocket.program("v.glsl", "f.glsl")
-    camera = aux.View(fov=45)
     sphere = aux.Mover()
-    camera.move(z=-4)
+    sphere.rotate(y=90)
+    camera = aux.View(fov=20)
+    camera.move(z=-8)
 
 
 def load_texture():
     global slate
-    # This is the texture.
-    #slate = np.full((500, 500, 3), 128, dtype=np.uint8)
     slate = Texture2D(imread("planet.png"), wrapping='repeat')
 
 
