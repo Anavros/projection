@@ -53,8 +53,8 @@ def draw():
     program['slate'] = slate
     program['color'] = (0.0, 0.0, 0.0, 1.0)
     program.draw('triangle_strip', ind)
-    program['color'] = (0.2, 0.3, 0.4, 1.0)
-    program.draw('points')
+    #program['color'] = (0.2, 0.3, 0.4, 1.0)
+    #program.draw('points')
 
 
 @rocket.attach
