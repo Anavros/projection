@@ -25,12 +25,35 @@ mesh = WebGL.points
     [ (Attributes 0 0)
     ]
 
+
 uvsphere : Int -> WebGL.Mesh Attributes
-uvsphere n = WebGL.points
-    (List.map2 (\lon lat -> Attributes lon lat)
-        (divide n -3.14 3.14)
-        (divide n 0 3.14)
-    )
+uvsphere n =
+    (lats n)
+    |> List.map (buildRow (lons n))
+    |> List.concat
+    |> List.unzip
+    |> toAttrs
+    |> WebGL.points
+
+
+toAttrs : (List Float, List Float) -> List Attributes
+toAttrs (lons, lats) = 
+    List.map2 (\lon lat -> Attributes lon lat) lons lats
+
+
+buildRow : List Float -> Float -> List (Float, Float)
+buildRow lons lat =
+    List.map (\lon -> (lon, lat)) lons
+
+
+pi : Float
+pi = 3.14
+
+lons : Int -> List Float
+lons n = divide n -pi pi
+
+lats : Int -> List Float
+lats n = divide n 0 pi
 
 
 divide : Int -> Float -> Float -> List Float

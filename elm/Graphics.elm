@@ -23,7 +23,7 @@ vs = [glsl|
     
     void main(void) {
         gl_Position = vec4(proj * view * mdel * spherical(1.0, lon, lat));
-        gl_PointSize = 10.0;
+        gl_PointSize = 5.0;
     }
 |]
 
