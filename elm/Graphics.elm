@@ -2,14 +2,28 @@
 module Graphics exposing (..)
 
 import WebGL
-import Types exposing (..)
 import Math.Vector3 as V3 exposing (Vec3)
+
+import Types exposing (..)
+import Geometry
+
 
 vShader : WebGL.Shader Attributes Uniforms Varyings
 vShader = [glsl|
-    attribute vec3 pos;
+    precision highp float;
+    attribute float lon;
+    attribute float lat;
+    uniform mat4 mdel;
+    uniform mat4 view;
+    uniform mat4 proj;
+    
+    vec4 spherical(float rad, float lon, float lat) {
+        return vec4(rad*sin(lat)*cos(lon), rad*sin(lat)*sin(lon), rad*cos(lat), 1.0);
+    }
+    
     void main(void) {
-        gl_Position = vec4(pos, 1.0);
+        gl_Position = vec4(proj * view * mdel * spherical(1.0, lon, lat));
+        gl_PointSize = 100.0;
     }
 |]
 
@@ -22,14 +36,6 @@ fShader = [glsl|
     }
 |]
 
-mesh : WebGL.Mesh Attributes
-mesh = WebGL.triangles
-    [ ( (Attributes (V3.vec3  1.0  1.0 0.0))
-      , (Attributes (V3.vec3 -1.0 -1.0 0.0))
-      , (Attributes (V3.vec3  1.0 -1.0 0.0))
-      )
-    ]
+uniforms = Uniforms (V3.vec3 0.5 0.5 0.5) Geometry.proj Geometry.view Geometry.mdel
 
-uniforms = Uniforms (V3.vec3 0.0 0.0 0.0)
-
-testEntity = WebGL.entity vShader fShader mesh uniforms
+testEntity = WebGL.entity vShader fShader Geometry.mesh uniforms
