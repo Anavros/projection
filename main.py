@@ -10,27 +10,38 @@ from vispy.gloo import IndexBuffer
 def uvsphere(radius, h, v):
     size = h*v
     index_count = size*2 - h*2  # hard to explain
+    # What is rad for?
     rad = np.full(size, radius, dtype=np.float32)
     azi = np.zeros(size, dtype=np.float32)
     inc = np.zeros(size, dtype=np.float32)
     tex = np.zeros((size, 2), dtype=np.float32)
     ind = np.zeros(index_count, dtype=np.uint32)
-    azi_step = 2*pi/h
-    inc_step = 1*pi/v
-    tex_step = 1/size
-    a = -pi
-    i = 0.0
-    x = 0.0
-    y = 1.0
+#    # Azimuth, or longitude, ranges from -pi to +pi.
+#    azi_step = 2*pi/h
+#    # Inclination, or latitude, ranges from 0 to +pi.
+#    inc_step = 1*pi/v
+#    # Texture indices range from (0, 0) to (1, 1).
+#    tex_step = 1/size
+#    a = -pi
+#    i = 0.0
+#    x = 0.0
+#    y = 1.0
     for row in range(h):
+        lat = pi * (row) / (h-1)
         for col in range(v):
-            azi[row*h+col] = a
-            inc[row*h+col] = i
-            tex[row*h+col, :] = x, y
-            a += azi_step
-            x += tex_step
-        i += inc_step
-        y -= tex_step * v
+            lon = pi * 2 * col / v
+            i   = row*h + col
+            inc[i] = lat
+            azi[i] = lon
+#    for row in range(h):
+#        for col in range(v):
+#            a += azi_step
+#            x += tex_step
+#            azi[row*h+col] = a
+#            inc[row*h+col] = i
+#            tex[row*h+col, :] = x, y
+#        i += inc_step
+#        y -= tex_step * v
     # Generate indices for triangle_strip in another step.
     n1, n2 = 0, h
     for i in range(index_count):
@@ -40,6 +51,7 @@ def uvsphere(radius, h, v):
         else:
             ind[i] = n2
             n2 += 1
+    print(inc)
     return rad, azi, inc, tex, IndexBuffer(ind)
 
 
@@ -73,7 +85,7 @@ def main():
     global rad, azi, inc, tex, ind
     init()
     load_texture()
-    rad, azi, inc, tex, ind = uvsphere(1, 20, 20)
+    rad, azi, inc, tex, ind = uvsphere(1, 8, 8)
     rocket.prep()
     rocket.launch()
 
