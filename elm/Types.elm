@@ -2,15 +2,29 @@
 module Types exposing (..)
 
 import Html exposing (Html)
+import Time exposing (Time)
 import Math.Matrix4 as M4 exposing (Mat4)
 import Math.Vector3 as V3 exposing (Vec3)
+import Keyboard
+import WebGL
 
 
 type Message
-    = Pass
+    = Key Bool Keyboard.KeyCode
+    | Animate Time
 
 type alias Page =
     Html Message
+
+type alias Effect =
+    Cmd Message
+
+type alias Model =
+    { mesh     : WebGL.Mesh Attributes
+    , uniforms : Uniforms
+    , dx : Int
+    , dy : Int
+    }
 
 type alias Attributes =
     { lon : Float
@@ -26,5 +40,3 @@ type alias Uniforms =
 
 type alias Varyings =
     { }
-
-
