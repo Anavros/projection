@@ -27,4 +27,4 @@ uniforms = Uniforms (V3.vec3 0.5 0.5 0.5) Geometry.proj Geometry.view Geometry.m
 
 
 init : (Model, Effect)
-init = (Model mesh uniforms 0 0, Cmd.none)
+init = (Model mesh uniforms 0.0 0.0, Cmd.none)

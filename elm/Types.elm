@@ -22,8 +22,8 @@ type alias Effect =
 type alias Model =
     { mesh     : WebGL.Mesh Attributes
     , uniforms : Uniforms
-    , dx : Int
-    , dy : Int
+    , dx : Float
+    , dy : Float
     }
 
 type alias Attributes =
