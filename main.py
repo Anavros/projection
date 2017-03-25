@@ -4,7 +4,7 @@ from rocket import aux
 import numpy as np
 from scipy.misc import imread
 from math import pi, sqrt
-from vispy.gloo import IndexBuffer
+from vispy.gloo import IndexBuffer, Texture2D
 
 
 def uvsphere(radius, h, v):
@@ -16,32 +16,18 @@ def uvsphere(radius, h, v):
     inc = np.zeros(size, dtype=np.float32)
     tex = np.zeros((size, 2), dtype=np.float32)
     ind = np.zeros(index_count, dtype=np.uint32)
-#    # Azimuth, or longitude, ranges from -pi to +pi.
-#    azi_step = 2*pi/h
-#    # Inclination, or latitude, ranges from 0 to +pi.
-#    inc_step = 1*pi/v
-#    # Texture indices range from (0, 0) to (1, 1).
-#    tex_step = 1/size
-#    a = -pi
-#    i = 0.0
-#    x = 0.0
-#    y = 1.0
+    # We need an extra seam along longitude 1 so the texture doesn't
+    # try to wrap back on itself. Right?
     for row in range(h):
-        lat = pi * (row) / (h-1)
+        lat = pi * row / (h-1)
+        t_y = row / (h-1)
         for col in range(v):
-            lon = pi * 2 * col / v
             i   = row*h + col
+            lon = pi * 2 * col / (v-1)
+            t_x = col / (v-1)
             inc[i] = lat
             azi[i] = lon
-#    for row in range(h):
-#        for col in range(v):
-#            a += azi_step
-#            x += tex_step
-#            azi[row*h+col] = a
-#            inc[row*h+col] = i
-#            tex[row*h+col, :] = x, y
-#        i += inc_step
-#        y -= tex_step * v
+            tex[i, :] = (t_x, t_y)
     # Generate indices for triangle_strip in another step.
     n1, n2 = 0, h
     for i in range(index_count):
@@ -51,7 +37,7 @@ def uvsphere(radius, h, v):
         else:
             ind[i] = n2
             n2 += 1
-    print(inc)
+    print(tex)
     return rad, azi, inc, tex, IndexBuffer(ind)
 
 
@@ -85,7 +71,7 @@ def main():
     global rad, azi, inc, tex, ind
     init()
     load_texture()
-    rad, azi, inc, tex, ind = uvsphere(1, 8, 8)
+    rad, azi, inc, tex, ind = uvsphere(1, 32, 32)
     rocket.prep()
     rocket.launch()
 
@@ -102,7 +88,7 @@ def load_texture():
     global slate
     # This is the texture.
     #slate = np.full((500, 500, 3), 128, dtype=np.uint8)
-    slate = imread("texture.png")
+    slate = Texture2D(imread("texture.png"), wrapping='repeat')
 
 
 if __name__ == '__main__':
