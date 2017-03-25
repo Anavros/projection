@@ -6,6 +6,9 @@ from scipy.misc import imread
 from math import pi, sqrt
 from vispy.gloo import IndexBuffer, Texture2D
 
+SIZE = 600
+BACK = (0, 0, 0)
+
 
 def uvsphere(radius, h, v):
     size = h*v
@@ -16,8 +19,7 @@ def uvsphere(radius, h, v):
     inc = np.zeros(size, dtype=np.float32)
     tex = np.zeros((size, 2), dtype=np.float32)
     ind = np.zeros(index_count, dtype=np.uint32)
-    # We need an extra seam along longitude 1 so the texture doesn't
-    # try to wrap back on itself. Right?
+    # TODO: Explain this boggy mess.
     for row in range(h):
         lat = pi * row / (h-1)
         t_y = row / (h-1)
@@ -37,7 +39,6 @@ def uvsphere(radius, h, v):
         else:
             ind[i] = n2
             n2 += 1
-    print(tex)
     return rad, azi, inc, tex, IndexBuffer(ind)
 
 
@@ -58,6 +59,12 @@ def draw():
 
 
 @rocket.attach
+def key_press(key):
+    if key == "R":
+        load_texture()
+
+
+@rocket.attach
 def left_drag(start, end, delta):
     sphere.rotate(x=delta[0], y=delta[1])
 
@@ -72,7 +79,7 @@ def main():
     init()
     load_texture()
     rad, azi, inc, tex, ind = uvsphere(1, 32, 32)
-    rocket.prep()
+    rocket.prep(size=(SIZE, SIZE), clear_color=BACK)
     rocket.launch()
 
 
@@ -88,7 +95,7 @@ def load_texture():
     global slate
     # This is the texture.
     #slate = np.full((500, 500, 3), 128, dtype=np.uint8)
-    slate = Texture2D(imread("texture.png"), wrapping='repeat')
+    slate = Texture2D(imread("planet.png"), wrapping='repeat')
 
 
 if __name__ == '__main__':
