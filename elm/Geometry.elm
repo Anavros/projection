@@ -11,15 +11,15 @@ pi = 3.14
 
 uvsphere : Int -> WebGL.Mesh Attributes
 uvsphere n = WebGL.indexedTriangles
-    ( combine (verts n) (texes n) )
-    ( indices n )
+    ( combine (Debug.log "Verts" (verts n)) (texes n) )
+    ( Debug.log "Index" (indices n) )
 
 uvpoints : Int -> WebGL.Mesh Attributes
 uvpoints n = WebGL.points
     ( combine (verts n) (texes n) )
 
-verts n = grid n (-pi, pi) (0, pi)
-texes n = grid n (0, 1) (0, 1)
+verts n = grid (n-1) (0, 2*pi) (0, pi)
+texes n = grid (n-1) (0, 1) (0, 1)
 
 combine : List (Float, Float) -> List (Float, Float) -> List Attributes
 combine verts texes =
