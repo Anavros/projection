@@ -9,27 +9,25 @@ import Graphics
 import Geometry
 import Update
 import View
-import Task
+import Task exposing (Task)
 
 
 main = Html.program
     { init = init
-    , view = (View.body Graphics.vs Graphics.fs)
+    , view = View.body Graphics.vs Graphics.fs
     , subscriptions = Update.subscriptions
     , update = Update.dispatch
     }
 
 
-mesh : WebGL.Mesh Attributes
-mesh = Geometry.uvsphere 32
+planet : WebGL.Texture -> Model
+planet texture = Model
+    --(Geometry.uvsphere 8)
+    --(Geometry.uvsphere 32)
+    --(Geometry.uvpoints 8)
+    (Geometry.uvpoints 32)
+    (Uniforms Graphics.proj Graphics.view Graphics.mdel texture)
 
 
-texture = Task.attempt TextureUpdate (Texture.load "planet.png")
-
-
-uniforms : Uniforms
-uniforms = Uniforms (V3.vec3 0.4 0.6 0.7) Graphics.proj Graphics.view Graphics.mdel Nothing
-
-
-init : (Model, Effect)
-init = (Model mesh uniforms 0.0 0.0, Cmd.none)
+init : (Maybe Model, Effect)
+init = (Nothing, Task.attempt (CreateModel planet) (Texture.load "planet.png"))

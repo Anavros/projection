@@ -5,15 +5,15 @@ import Html exposing (Html)
 import Time exposing (Time)
 import Math.Matrix4 as M4 exposing (Mat4)
 import Math.Vector3 as V3 exposing (Vec3)
+import Math.Vector2 as V2 exposing (Vec2)
 import Keyboard
 import WebGL
 import WebGL.Texture as Texture
 
 
 type Message
-    = Key Bool Keyboard.KeyCode
-    | Animate Time
-    | TextureUpdate (Result Texture.Error WebGL.Texture)
+    = Animate Time
+    | CreateModel (WebGL.Texture -> Model) (Result Texture.Error WebGL.Texture)
 
 type alias Page =
     Html Message
@@ -24,8 +24,6 @@ type alias Effect =
 type alias Model =
     { mesh     : WebGL.Mesh Attributes
     , uniforms : Uniforms
-    , dx : Float
-    , dy : Float
     }
 
 type alias Attributes =
@@ -36,12 +34,12 @@ type alias Attributes =
     }
 
 type alias Uniforms =
-    { color : Vec3
-    , proj : Mat4
+    { proj : Mat4
     , view : Mat4
     , mdel : Mat4
-    , texture : Maybe WebGL.Texture
+    , texture : WebGL.Texture
     }
 
 type alias Varyings =
-    { }
+    { tex : Vec2
+    }

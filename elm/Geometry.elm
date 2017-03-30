@@ -14,6 +14,10 @@ uvsphere n = WebGL.indexedTriangles
     ( combine (verts n) (texes n) )
     ( indices n )
 
+uvpoints : Int -> WebGL.Mesh Attributes
+uvpoints n = WebGL.points
+    ( combine (verts n) (texes n) )
+
 verts n = grid n (-pi, pi) (0, pi)
 texes n = grid n (0, 1) (0, 1)
 
