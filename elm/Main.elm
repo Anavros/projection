@@ -22,7 +22,7 @@ main = Html.program
 
 planet : WebGL.Texture -> Model
 planet texture = Model
-    (Geometry.uvsphere 3)
+    (Geometry.uvsphere 5)
     --(Geometry.uvsphere 32)
     --(Geometry.uvpoints 8)
     --(Geometry.uvpoints 32)

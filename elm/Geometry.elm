@@ -44,11 +44,13 @@ row : List Float -> Float -> List (Float, Float)
 row xs y =
     List.map (\x -> (x, y)) xs
 
+
 divide : Int -> Float -> Float -> List Float
 -- Ex: divide 5 1.0 2.0 -> [2.0, 1.8, 1.6, 1.4, 1.2, 1.0]
 -- Produces a list of size n+1, includes both min and max.
 divide n min max =
     min :: List.reverse (step n ((max-min)/(toFloat n)) max)
+
 
 step : Int -> Float -> Float -> List Float
 -- Divide a range into a number of discrete points.
@@ -63,18 +65,18 @@ step n size max =
 -- These are indices for the triangle rendering method.
 -- For some reason, triangle_strip doesn't have an indexed version.
 indices : Int -> List (Int, Int, Int)
-indices n = evenStep ((n-1)^2 * 2) 0 n
+indices n = evenStep (((n-1)*n*2)-2) 0 n
 
 evenStep : Int -> Int -> Int -> List (Int, Int, Int)
 evenStep n even odd =
     if n <= 1 then
-        [(even, even+1, odd)]
+        [(even, odd, even+1)]
     else
-        (even, even+1, odd) :: (oddStep (n-1) (even+1) odd)
+        (even, odd, even+1) :: (oddStep (n-1) (even+1) odd)
 
 oddStep : Int -> Int -> Int -> List (Int, Int, Int)
 oddStep n even odd =
     if n <= 1 then
-        [(even, odd, odd+1)]
+        [(odd, even, odd+1)]
     else
-        (even, odd, odd+1) :: (evenStep (n-1) even (odd+1))
+        (odd, even, odd+1) :: (evenStep (n-1) even (odd+1))

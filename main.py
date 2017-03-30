@@ -39,8 +39,8 @@ def uvsphere(radius, h, v):
         else:
             ind[i] = n2
             n2 += 1
-    print(azi)
-    print(inc)
+    #print(list(zip(azi, inc)))
+    print(ind)
     return rad, azi, inc, tex, IndexBuffer(ind)
 
 
@@ -78,7 +78,7 @@ def main():
     global rad, azi, inc, tex, ind
     init()
     load_texture()
-    rad, azi, inc, tex, ind = uvsphere(1, 3, 3)
+    rad, azi, inc, tex, ind = uvsphere(1, 5, 5)
     rocket.prep(size=(SIZE, SIZE), clear_color=BACK)
     rocket.launch()
 
