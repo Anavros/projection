@@ -7,11 +7,13 @@ import Math.Matrix4 as M4 exposing (Mat4)
 import Math.Vector3 as V3 exposing (Vec3)
 import Keyboard
 import WebGL
+import WebGL.Texture as Texture
 
 
 type Message
     = Key Bool Keyboard.KeyCode
     | Animate Time
+    | TextureUpdate (Result Texture.Error WebGL.Texture)
 
 type alias Page =
     Html Message
@@ -36,6 +38,7 @@ type alias Uniforms =
     , proj : Mat4
     , view : Mat4
     , mdel : Mat4
+    , texture : Maybe WebGL.Texture
     }
 
 type alias Varyings =

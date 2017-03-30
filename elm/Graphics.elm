@@ -3,9 +3,9 @@ module Graphics exposing (..)
 
 import WebGL
 import Math.Vector3 as V3 exposing (Vec3)
+import Math.Matrix4 as M4 exposing (Mat4)
 
 import Types exposing (..)
-import Geometry
 
 
 vs : WebGL.Shader Attributes Uniforms Varyings
@@ -35,3 +35,15 @@ fs = [glsl|
         gl_FragColor = vec4(color, 1.0);
     }
 |]
+
+
+proj : Mat4
+proj = M4.makePerspective 45.0 1.0 1.0 20.0
+
+
+view : Mat4
+view = M4.translate3 0.0 0.0 -5.0 M4.identity
+
+
+mdel : Mat4
+mdel = M4.identity

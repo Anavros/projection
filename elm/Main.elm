@@ -1,5 +1,6 @@
 
 import WebGL
+import WebGL.Texture as Texture
 import Html exposing (Html)
 import Math.Vector3 as V3 exposing (Vec3)
 
@@ -8,6 +9,7 @@ import Graphics
 import Geometry
 import Update
 import View
+import Task
 
 
 main = Html.program
@@ -22,8 +24,11 @@ mesh : WebGL.Mesh Attributes
 mesh = Geometry.uvsphere 32
 
 
+texture = Task.attempt TextureUpdate (Texture.load "planet.png")
+
+
 uniforms : Uniforms
-uniforms = Uniforms (V3.vec3 0.5 0.5 0.5) Geometry.proj Geometry.view Geometry.mdel
+uniforms = Uniforms (V3.vec3 0.4 0.6 0.7) Graphics.proj Graphics.view Graphics.mdel Nothing
 
 
 init : (Model, Effect)

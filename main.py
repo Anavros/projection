@@ -85,7 +85,7 @@ def init():
     global program, camera, sphere
     program = rocket.program("v.glsl", "f.glsl")
     sphere = aux.Mover()
-    sphere.rotate(y=90)
+    sphere.rotate(y=-90)
     camera = aux.View(fov=20)
     camera.move(z=-8)
 

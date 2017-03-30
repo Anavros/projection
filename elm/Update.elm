@@ -20,6 +20,8 @@ dispatch msg model = case msg of
         _ -> (model, Cmd.none)
     Animate dt ->
         ({model|uniforms = (step model.uniforms model.dx model.dy)}, Cmd.none)
+    _ ->
+        (model, Cmd.none)
 
 
 f : Bool -> Float -> Float -> Float

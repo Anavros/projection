@@ -2,48 +2,21 @@
 module Geometry exposing (..)
 
 import WebGL
-import Math.Matrix4 as M4 exposing (Mat4)
-import Math.Vector3 as V3 exposing (Vec3)
-
 import Types exposing (..)
 
 
-proj : Mat4
-proj = M4.makePerspective 45.0 1.0 1.0 20.0
-
-
-view : Mat4
-view = M4.translate3 0.0 0.0 -5.0 M4.identity
-
-
-mdel : Mat4
-mdel = M4.identity
-
-
-mesh : WebGL.Mesh Attributes
-mesh = WebGL.points
-    [ (Attributes 0 0)
-    ]
-
-
 uvsphere : Int -> WebGL.Mesh Attributes
-uvsphere n =
-    (lats n)
-    |> List.map (buildRow (lons n))
-    |> List.concat
-    |> List.unzip
-    |> toAttrs
-    |> WebGL.points
-
-
-toAttrs : (List Float, List Float) -> List Attributes
-toAttrs (lons, lats) = 
-    List.map2 (\lon lat -> Attributes lon lat) lons lats
-
+uvsphere n = WebGL.indexedTriangles
+    ( (lats n) |> List.map (buildRow (lons n)) |> List.concat |> List.unzip |> toAttrs )
+    ( indices n )
 
 buildRow : List Float -> Float -> List (Float, Float)
 buildRow lons lat =
     List.map (\lon -> (lon, lat)) lons
+
+toAttrs : (List Float, List Float) -> List Attributes
+toAttrs (lons, lats) = 
+    List.map2 (\lon lat -> Attributes lon lat) lons lats
 
 
 pi : Float
@@ -71,3 +44,23 @@ step n size max =
         [max]
     else
         max :: step (n-1) size (max-size)
+
+
+-- These are indices for the triangle rendering method.
+-- For some reason, triangle_strip doesn't have an indexed version.
+indices : Int -> List (Int, Int, Int)
+indices n = evenStep ((n-1)^2 * 2) 0 n
+
+evenStep : Int -> Int -> Int -> List (Int, Int, Int)
+evenStep n even odd =
+    if n <= 1 then
+        [(even, even+1, odd)]
+    else
+        (even, even+1, odd) :: (oddStep (n-1) (even+1) odd)
+
+oddStep : Int -> Int -> Int -> List (Int, Int, Int)
+oddStep n even odd =
+    if n <= 1 then
+        [(even, odd, odd+1)]
+    else
+        (even, odd, odd+1) :: (evenStep (n-1) even (odd+1))
