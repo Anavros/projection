@@ -13,10 +13,12 @@ vs = [glsl|
     precision highp float;
     attribute float lon;
     attribute float lat;
+    attribute float x;
+    attribute float y;
     uniform mat4 mdel;
     uniform mat4 view;
     uniform mat4 proj;
-    
+
     vec4 spherical(float rad, float lon, float lat) {
         return vec4(rad*sin(lat)*cos(lon), rad*sin(lat)*sin(lon), rad*cos(lat), 1.0);
     }

@@ -31,6 +31,8 @@ type alias Model =
 type alias Attributes =
     { lon : Float
     , lat : Float
+    , x : Float
+    , y : Float
     }
 
 type alias Uniforms =
