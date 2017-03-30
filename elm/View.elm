@@ -20,7 +20,10 @@ body vs fs model = case model of
 
 canvas : WebGL.Entity -> Page
 canvas planet = WebGL.toHtmlWith
-    [ WebGL.clearColor 0.0 0.0 0.0 1.0 ]
+    [ WebGL.clearColor 0.0 0.0 0.0 1.0
+    , WebGL.depth 1
+    , WebGL.antialias
+    ]
     [ Attr.style [ ]
     , Attr.width 500
     , Attr.height 500

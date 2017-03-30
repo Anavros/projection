@@ -6,13 +6,13 @@ import Types exposing (..)
 
 
 pi : Float
-pi = 3.14
+pi = 3.14159265359
 
 
 uvsphere : Int -> WebGL.Mesh Attributes
 uvsphere n = WebGL.indexedTriangles
-    ( combine (Debug.log "Verts" (verts n)) (texes n) )
-    ( Debug.log "Index" (indices n) )
+    ( combine (verts n) (texes n) )
+    ( indices n )
 
 uvpoints : Int -> WebGL.Mesh Attributes
 uvpoints n = WebGL.points

@@ -78,7 +78,7 @@ def main():
     global rad, azi, inc, tex, ind
     init()
     load_texture()
-    rad, azi, inc, tex, ind = uvsphere(1, 5, 5)
+    rad, azi, inc, tex, ind = uvsphere(1, 8, 8)
     rocket.prep(size=(SIZE, SIZE), clear_color=BACK)
     rocket.launch()
 

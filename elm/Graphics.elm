@@ -10,7 +10,7 @@ import Types exposing (..)
 
 vs : WebGL.Shader Attributes Uniforms Varyings
 vs = [glsl|
-    precision mediump float;
+    precision highp float;
 
     attribute float lon;
     attribute float lat;
@@ -35,7 +35,7 @@ vs = [glsl|
 
 fs : WebGL.Shader {} Uniforms Varyings
 fs = [glsl|
-    precision mediump float;
+    precision highp float;
 
     uniform sampler2D texture;
     varying vec2 tex;
