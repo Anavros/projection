@@ -14,6 +14,7 @@ import WebGL.Texture as Texture
 type Message
     = Animate Time
     | CreateModel (WebGL.Texture -> Model) (Result Texture.Error WebGL.Texture)
+    | TogglePause
 
 type alias Page =
     Html Message
@@ -24,6 +25,7 @@ type alias Effect =
 type alias Model =
     { mesh     : WebGL.Mesh Attributes
     , uniforms : Uniforms
+    , paused   : Bool
     }
 
 type alias Attributes =

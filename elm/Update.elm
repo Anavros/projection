@@ -23,11 +23,22 @@ dispatch msg model = case msg of
             (Just (planet texture), Cmd.none)
         Err _ ->
             (model, Cmd.none)
+    TogglePause -> case model of
+        Just model ->
+            (Just {model|paused = not model.paused}, Cmd.none)
+        Nothing ->
+            (model, Cmd.none)
 
 
 subscriptions : Maybe Model -> Sub Message
-subscriptions _ =
-    AnimationFrame.diffs Animate
+subscriptions model = case model of
+    Just model ->
+        if model.paused then
+            Sub.none
+        else
+            AnimationFrame.diffs Animate
+    Nothing ->
+        Sub.none
 
 
 step : Uniforms -> Uniforms
